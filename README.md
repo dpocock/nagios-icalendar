@@ -47,6 +47,13 @@ Mozilla Lightning plugin) you just have to add a new remote calendar
 using the http://host:port URL where your nagios-icalendar instance
 is running.
 
+You can use the URL parameter 'contact' to restrict the query
+to those services and hosts with a particular contact, e.g:
+
+    http://nagios-host:5001
+
+    http://nagios-host:5001?contact=daniel
+
 Copyright notice
 ----------------
 
