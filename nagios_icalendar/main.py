@@ -115,7 +115,7 @@ def ics_feed():
     cal.add('version', '1.0')
 
     s = mk_livestatus.Socket(conf['livestatus_sock'])
-    q = s.services.columns('state', 'host_alias', 'description', 'long_plugin_output', 'last_state_change', 'last_check', 'action_url_expanded', 'acknowledged').filter('state > 0')
+    q = s.services.columns('state', 'host_alias', 'description', 'plugin_output', 'last_state_change', 'last_check', 'action_url_expanded', 'acknowledged').filter('state > 0')
     q_contact = flask.request.args.get('contact')
     if q_contact is not None:
        log.debug("Contact: %s" % q_contact)
@@ -127,7 +127,7 @@ def ics_feed():
             todo = icalendar.Todo()
             todo['uid'] = make_uid(row)
             todo['summary'] = make_title(row)
-            todo['description'] = row['long_plugin_output']
+            todo['description'] = row['plugin_output']
             if row['action_url_expanded']:
                 todo['url'] = row['action_url_expanded']
             todo.add('created', parse_nagios_ts(row['last_state_change']))
@@ -141,7 +141,7 @@ def ics_feed():
             return flask.Response(status_code=500,
                 status='Error parsing Nagios data')
 
-    q = s.hosts.columns('state', 'alias', 'plugin_output', 'long_plugin_output', 'last_state_change', 'last_check', 'action_url_expanded', 'acknowledged').filter('state > 0')
+    q = s.hosts.columns('state', 'alias', 'plugin_output', 'last_state_change', 'last_check', 'action_url_expanded', 'acknowledged').filter('state > 0')
     if q_contact is not None:
        log.debug("Contact: %s" % q_contact)
        q = q.filter('contacts >= %s' % q_contact)
@@ -152,7 +152,6 @@ def ics_feed():
             todo = icalendar.Todo()
             todo['uid'] = make_uid(row)
             todo['summary'] = make_title(row)
-            todo['description'] = row['long_plugin_output']
             if row['action_url_expanded']:
                 todo['url'] = row['action_url_expanded']
             todo.add('created', parse_nagios_ts(row['last_state_change']))
