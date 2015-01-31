@@ -169,6 +169,19 @@ def ics_feed():
     return flask.Response("%s" % display(cal),
         mimetype='text/calendar')
 
+@app.after_request
+def add_header(response):
+    if 'validity_period' in conf:
+        validity_period = int(conf['validity_period'])
+    else:
+        validity_period = 30
+    # for HTTP 1.1
+    response.cache_control.max_age = validity_period
+    # for HTTP 1.0
+    now = datetime.datetime.now()
+    response.expires = now + datetime.timedelta(seconds=validity_period)
+    return response
+
 if __name__ == '__main__':
     setup_logging()
     arg_parser = argparse.ArgumentParser()

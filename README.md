@@ -36,6 +36,7 @@ Create a configuration file for this script, for example:
     bind_address: ::0
     bind_port: 5001
     task_contact: support@example.org
+    validity_period: 60
 
 Start the process (must run as a user having access to the
 livestatus_sock socket):
