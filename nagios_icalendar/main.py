@@ -25,7 +25,6 @@
 import argparse
 import datetime
 import flask
-import github
 import icalendar
 import logging
 import md5
